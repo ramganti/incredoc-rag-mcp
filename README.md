@@ -170,3 +170,4 @@ Test Chat via Host (Port 4000):
 curl -X POST http://localhost:4000/prompt/doc_chat \
 -H "Content-Type: application/json" \
 -d '{"question": "What is covered?", "filename": "YOUR_FILENAME.pdf"}'
+
