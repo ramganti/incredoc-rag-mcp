@@ -1,0 +1,86 @@
+======
+
+1. we need to build python based MCP (model Context Protocol) project
+2. MCP Client
+	2.1 MCP Client is a UI which will provide chat (multi) interface. 
+	2.2 The user will ask questions based on the documents uploaded, chunked and vectorized (will talk just a while). 
+	2.3 The questions will eventually be sent to ollama (mistral) to generate responses via MCP Host
+	2.4 consider a Gradio UI
+3. Airflow - DAGs will eventually modified to send http post message (f) to Host. 
+	example: 
+	3.1 intake_file (dag) when triggered will send a curl -X POST http://localhost:4000/resource/incredoc.resource.doc_intake \ 
+	3.2 vectorize will send 
+		curl -X POST curl -X POST http://localhost:4000/tool/vectorizer \ (synchronous )
+  			-H "Content-Type: application/json" \
+			-d '{}'
+	note: the calls needs to be syncronous i.e. DAG waits until mcp servers completes and relays back to Host and to airflow (client)		
+			
+4. 
+	4.1 MCP Host is a http Host that receives requests 
+	4.2 Host listens on port 4000
+	4.3 registers the MCP servers (described below)
+	4.4 redirect the requests to the appropriate modules (MCP Servers)
+	4.5 respond back to the MCP Client (chat) or airflow DAGs (intake files or vecorize)
+
+5. MCP Servers (I call them modules)
+	5.1 incredoc.resource.doc_intake
+		a) exposes rest end points listens on port 6001
+		b) watches the files in a folder (say source_docs)
+		c) updates the "manifest.json" file with a new checksum (uuid) with last_updated_timestamp
+		d) responds back with json array (example below)
+			[{"status":"Vectorization complete.","processed":["Benefits_Policy_v1.pdf"],"skipped":["Benefits_Policy_v2.pdf","Gold_80_PPO__MK002171_01-25_SBC.pdf"]}]
+	5.2 incredoc.tool.vectorizer
+		a) exposes rest end points listens on port 6002 
+		b) reads the source files (only changed files)
+		c) chunks and vectorize and store in pinecone. 
+		d) pinecone details : 
+			Key : pcsk_79Vx8Y_G56NwHmCj8dWgwjz4xuMXNdzuutVXAfn5ZsyZeQMC9j4yHr2K96EKvbab2gXnij
+			Index name : mcp-explore-768
+			region : us-east-1
+	5.3 incredoc.prompt.doc_chat
+		a) exposes rest end points listens on port 6003
+		b) receives questions from MCP Client
+		c) uses prompt template and send request to ollama (mistal)
+		d) receives the response from ollma
+			
+=======
+
+You are required to 
+1. create scaffold the project. Assume the root folder name is incredoc_rag
+2. provide step by step - starting with MCP servers, thenn host and then MCP client
+
+# Core project structure
+mkdir airflow_dags
+mkdir airflow_plugins
+mkdir mcp_host
+mkdir mcp_servers
+mkdir mcp_servers/doc_intake
+mkdir mcp_servers/vectorizer
+mkdir mcp_servers/doc_chat
+mkdir mcp_servers/doc_intake/source_docs
+mkdir mcp_servers/doc_chat/prompt_templates
+mkdir mcp_client
+
+# Create placeholder files
+touch airflow_dags/helloWorld_dag.py
+touch airflow_dags/incredoc_dag.py
+touch airflow_dags/incredoc_vector_trigger_dag.py
+touch airflow_plugins/intake_task.py
+touch airflow_plugins/vectorize_task.py
+touch mcp_host/app.py
+touch mcp_host/requirements.txt
+touch mcp_servers/doc_intake/app.py
+touch mcp_servers/doc_intake/manifest.json 
+touch mcp_servers/doc_intake/requirements.txt
+touch mcp_servers/vectorizer/app.py
+touch mcp_servers/vectorizer/requirements.txt
+touch mcp_servers/vectorizer/pinecone_config.py
+touch mcp_servers/doc_chat/app.py
+touch mcp_servers/doc_chat/requirements.txt
+touch mcp_servers/doc_chat/prompt_templates/base_chat_prompt.txt
+touch mcp_client/app.py
+touch mcp_client/requirements.txt
+touch docker-compose.yaml
+touch .env
+touch requirements.txt
+

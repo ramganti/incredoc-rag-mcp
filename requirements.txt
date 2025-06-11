@@ -1,0 +1,9 @@
+flask
+requests
+watchdog
+langchain
+sentence-transformers
+pinecone-client
+python-dotenv
+ollama
+gradio

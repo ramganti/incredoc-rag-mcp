@@ -1,0 +1,26 @@
+{
+    "Benefits_Policy_v2.pdf": {
+        "uuid": "57f485ef-6a29-4c3c-beed-a60064c14d61",
+        "last_updated": "2025-06-11T21:06:43.660867Z",
+        "vectorized": true,
+        "no_of_chunks": 1
+    },
+    "Benefits_Policy_v1.pdf": {
+        "uuid": "bc21528c-51a0-4c08-8fa9-d0398aba7690",
+        "last_updated": "2025-06-11T21:06:43.661460Z",
+        "vectorized": true,
+        "no_of_chunks": 1
+    },
+    "MK002171_EvidenceOfCoverage.pdf": {
+        "uuid": "44405929-06fb-46bc-927e-4f200a04d4e0",
+        "last_updated": "2025-06-11T21:23:21.527569Z",
+        "vectorized": true,
+        "no_of_chunks": 522
+    },
+    "Benefits_Policy_v3.pdf": {
+        "uuid": "6e2b9406-e035-494b-bfa4-c8acdfe17c27",
+        "last_updated": "2025-06-11T22:13:56.522845Z",
+        "vectorized": true,
+        "no_of_chunks": 1
+    }
+}
